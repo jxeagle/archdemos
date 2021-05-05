@@ -1,0 +1,50 @@
+<html>
+  <head>
+
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.27.4.min.js"></script>
+  </head>
+  <body>
+    <h1>Websocket (Pubnub) Stream Data!</h1>
+
+    <script type="text/javascript">
+      const theChannel = 'the_guide';
+      const theEntry = 'data';
+      const pubnub = new PubNub({
+        // replace the key placeholders with your own PubNub publish and subscribe keys
+        subscribeKey: 'sub-c-aa129212-ad1d-11eb-8759-1eedd707a532',
+        uuid: "serverUUID-SUB"
+      });
+
+      pubnub.addListener({
+        message: function(event) {
+          displayMessage('[MESSAGE: received]',
+            event.message.entry + ': ' + event.message.update);
+        },
+        presence: function(event) {
+          displayMessage('[PRESENCE: ' + event.action + ']',
+            'uuid: ' + event.uuid + ', channel: ' + event.channel);
+        },
+        status: function(event) {
+          displayMessage('[STATUS: ' + event.category + ']',
+            'connected to channels: ' + event.affectedChannels);
+        }
+      });
+
+      pubnub.subscribe({
+        channels: ['the_guide'],
+        withPresence: true
+      });
+
+      displayMessage = function(messageType, aMessage) {
+        console.log(aMessage)
+        document.body.innerHTML += "streamed data: << " + aMessage + " >><br />";
+      }
+
+    var xhr = new XMLHttpRequest();
+        xhr.open('get', '/takes_forever', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send();
+
+  </script>
+  </body>
+</html>
