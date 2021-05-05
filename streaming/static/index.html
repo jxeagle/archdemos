@@ -1,0 +1,23 @@
+<html>
+  <head></head>
+  <body>    
+    <h1>Streaming Data!</h1>
+
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if(xhr.readyState == 3) {
+            var newData = xhr.response.substr(xhr.seenBytes);
+            console.log("newData: <<" +newData+ ">>");
+            document.body.innerHTML += "streamed data: <<" +newData+ ">><br />";
+
+            xhr.seenBytes = xhr.responseText.length;
+            console.log("seenBytes: " +xhr.seenBytes);
+          }
+        }
+        xhr.open('get', '/takes_forever', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send();
+    </script>
+  </body>
+</html>
